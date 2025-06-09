@@ -8,14 +8,6 @@ const projects = [
         image: "/projects/project1.png",
         tags: ["React", "Node.js", "CSS"],
         githubUrl: "https://github.com/Mateo-Boccalato/Surf-trackz.git",
-    },
-    {
-        id: 2,
-        title: "AstraAI",
-        description: "An interactive AI Chatbot that uses the OpenAI API to answer questions and help with tasks.",
-        image: "/projects/project2.png",
-        tags: ["React", "Node.js", "OpenAI API", "Tailwind CSS", "Express.js"],
-        githubUrl: "https://github.com/Mateo-Boccalato/AstraAI.git",
     }
 ];
 
@@ -34,12 +26,7 @@ export const ProjectsSection = () => {
                 {projects.map((project, key) => (
                 <div key={key} className="group bg-card rounded-lg overflow-hidden shadow-xs card-hover">
                     <div className="h-48 overflow-hidden">
-                        <img
-                            src={project.image}
-                            alt={project.title}
-                            className="w-full h-full object-cover"
-                            style={{ imageRendering: "auto" }}
-                        />
+                        <img src={project.image} alt={project.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/> 
                     </div>
 
                     <div className="p-6">
