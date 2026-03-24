@@ -11,6 +11,7 @@ export function SignalRoomZone({ isActive }: SignalRoomZoneProps) {
   const [copied, setCopied] = useState('')
 
   const locked = contactChannels.find((channel) => channel.id === lockedChannelId) ?? contactChannels[0]
+  const isResumeChannel = locked.id === 'resume'
 
   const copyValue = async (value: string) => {
     try {
@@ -56,12 +57,19 @@ export function SignalRoomZone({ isActive }: SignalRoomZoneProps) {
           <p>Channel locked: {locked.label}</p>
           <h3>{locked.value}</h3>
           <div className="dispatch-actions">
-            <a href={locked.href} target="_blank" rel="noreferrer">
-              Transmit
+            <a
+              href={locked.href}
+              target={isResumeChannel ? undefined : '_blank'}
+              rel={isResumeChannel ? undefined : 'noreferrer'}
+              download={isResumeChannel ? 'Mateo_Boccalato_Resume.pdf' : undefined}
+            >
+              {isResumeChannel ? 'Download' : 'Transmit'}
             </a>
-            <button type="button" onClick={() => copyValue(locked.value)}>
-              Copy
-            </button>
+            {!isResumeChannel && (
+              <button type="button" onClick={() => copyValue(locked.value)}>
+                Copy
+              </button>
+            )}
           </div>
           <small className="signal-feedback">{copied ? `Copied: ${copied}` : 'Awaiting relay'}</small>
         </motion.div>

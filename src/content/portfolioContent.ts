@@ -53,7 +53,7 @@ export const about = {
   ],
   stats: [
     { label: 'Years Building', value: '2+' },
-    { label: 'Projects Shipped', value: '10+' },
+    { label: 'Projects Worked On', value: '10+' },
     { label: 'Current Focus', value: 'AI + Full Stack' },
     { label: 'Mindset', value: 'Client-First' },
   ],
@@ -138,6 +138,19 @@ export const missions: Mission[] = [
       'Built RAG pipelines around personalized academic material.',
       'Mapped user learning barriers into technical model requirements.',
       'Improved engagement by tailoring retrieval and response behavior to learner context.',
+    ],
+  },
+  {
+    id: 'xray-fracture-identifier',
+    title: 'X-Ray Bone Fracture Identifier',
+    period: 'AI Club Project',
+    stack: ['Python', 'PyTorch', 'DenseNet-121', 'Image Preprocessing'],
+    impact: 'Built as a team-led medical imaging classifier initiative in AI Club.',
+    summary: 'Developed a DenseNet-121 based model to identify fracture patterns in X-ray scans.',
+    detail: [
+      'Prepared and normalized X-ray image data for model training workflows.',
+      'Fine-tuned DenseNet-121 to improve fracture detection signal quality.',
+      'Evaluated model outputs to guide iterative improvements in classification reliability.',
     ],
   },
 ]
@@ -254,6 +267,6 @@ export const contactChannels: ContactChannel[] = [
     id: 'resume',
     label: 'Resume',
     value: 'Download PDF',
-    href: 'https://www.mateoboccalato.com/Mateo_Boccalato_Resume.pdf',
+    href: '/Mateo_Boccalato_Resume.pdf',
   },
 ]

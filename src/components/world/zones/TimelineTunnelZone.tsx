@@ -30,7 +30,7 @@ export function TimelineTunnelZone({ isActive }: TimelineTunnelZoneProps) {
         ))}
       </div>
 
-      <div className="archive-line">
+      <div className="archive-line" data-prevent-zone-swipe="true">
         {filtered.map((entry, idx) => (
           <motion.article
             key={`${entry.title}-${entry.period}`}

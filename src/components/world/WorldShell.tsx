@@ -28,6 +28,7 @@ export function WorldShell() {
   const { activeZone, activeIndex, setActiveZone, goToNext, goToPrevious } = useZoneState(zoneIds)
   const prefersReducedMotion = useReducedMotion()
   const touchStart = useRef<{ x: number; y: number } | null>(null)
+  const isZoneSwipeBlocked = useRef(false)
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -84,9 +85,18 @@ export function WorldShell() {
           onTouchStart={(event) => {
             const touch = event.touches[0]
             touchStart.current = { x: touch.clientX, y: touch.clientY }
+            const target = event.target as HTMLElement | null
+            isZoneSwipeBlocked.current = Boolean(
+              target?.closest('[data-prevent-zone-swipe="true"]'),
+            )
           }}
           onTouchEnd={(event) => {
             if (!touchStart.current) return
+            if (isZoneSwipeBlocked.current) {
+              touchStart.current = null
+              isZoneSwipeBlocked.current = false
+              return
+            }
             const touch = event.changedTouches[0]
             const deltaX = touch.clientX - touchStart.current.x
             const deltaY = touch.clientY - touchStart.current.y
@@ -95,6 +105,7 @@ export function WorldShell() {
               if (deltaX > 0) goToPrevious()
             }
             touchStart.current = null
+            isZoneSwipeBlocked.current = false
           }}
         >
           <Suspense fallback={<div className="zone zone-loading">Loading zone...</div>}>
