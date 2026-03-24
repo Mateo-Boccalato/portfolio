@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #06080f;
+  --panel: rgba(5, 12, 20, 0.78);
+  --panel-strong: rgba(9, 16, 29, 0.95);
+  --line: rgba(95, 175, 255, 0.3);
+  --line-strong: rgba(137, 238, 255, 0.58);
+  --text: #e8f4ff;
+  --text-muted: #8ba8c2;
+  --accent: #00f0ff;
+  --accent-alt: #6d7dff;
+  --success: #24ffbe;
+  --danger: #ff5d8c;
+  --radius: 24px;
+  --radius-sm: 12px;
+  --shadow: 0 20px 90px rgba(0, 8, 18, 0.75);
+  --font-display: 'Syne', 'Trebuchet MS', sans-serif;
+  --font-body: 'Chakra Petch', 'Trebuchet MS', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Consolas', monospace;
+}
