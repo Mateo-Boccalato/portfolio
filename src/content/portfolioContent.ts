@@ -37,8 +37,8 @@ export type ContactChannel = {
 export const zoneOrder: { id: ZoneId; label: string; subtitle: string }[] = [
   { id: 'origins', label: 'About', subtitle: 'Who I am and how I build' },
   { id: 'skills', label: 'Skills', subtitle: 'Technical capabilities' },
-  { id: 'missions', label: 'Projects', subtitle: 'Selected project work' },
   { id: 'timeline', label: 'Experience', subtitle: 'Work and education timeline' },
+  { id: 'missions', label: 'Projects', subtitle: 'Selected project work' },
   { id: 'signal', label: 'Contact', subtitle: 'Ways to connect' },
 ]
 
@@ -83,6 +83,42 @@ export const skillClusters: SkillCluster[] = [
 ]
 
 export const missions: Mission[] = [
+  {
+    id: 'gridflo',
+    title: 'GridFlo Visual Dataflow Language',
+    period: 'Apr 2026 - May 2026',
+    stack: ['Python', 'Lexer', 'Parser', 'Interpreter', 'CLI'],
+    impact: 'Programs drawn as 2D grids of wired cells, executed as typed graphs.',
+    summary:
+      'Designed and built an experimental programming language where code is drawn as a dataflow grid instead of written as nested statements.',
+    detail: [
+      'Wrote a lexer, type-checking graph parser, and pull-based interpreter using only the Python standard library.',
+      'Built-in transforms for strings, numbers, streams, maps, gates, and reductions, plus reusable sub-graph "plates".',
+      'Shipped a CLI with run, check, and demo modes alongside sample programs like FizzBuzz and a static docs site.',
+    ],
+    links: [
+      { label: 'Live Site', href: 'https://mateo-boccalato.github.io/GridFlo/' },
+      { label: 'GitHub', href: 'https://github.com/Mateo-Boccalato/GridFlo' },
+    ],
+  },
+  {
+    id: 'dbg3d',
+    title: 'DBG3D Business Website',
+    period: 'Apr 2026 - May 2026',
+    stack: ['React', 'Three.js', 'React Router', 'Express', 'SQLite', 'Vercel'],
+    impact: 'Live site for a 3D scanning and reverse-engineering CAD studio.',
+    summary:
+      'Rebuilt a single-file static site for Designing Blueprints Group as a React app with an Express backend, then redesigned it around a clearer path to starting a project.',
+    detail: [
+      'Built an interactive Three.js model viewer with solid, wireframe, and x-ray modes and custom orbit controls.',
+      'Wrote Express routes backed by SQLite and email notifications for contact, video request, and license-gated download forms.',
+      'Reworked page hierarchy, mobile navigation, and service and industry content, deployed on Vercel.',
+    ],
+    links: [
+      { label: 'Live Site', href: 'https://www.dbg3d.com/' },
+      { label: 'GitHub', href: 'https://github.com/Mateo-Boccalato/DBG3D_Landing' },
+    ],
+  },
   {
     id: 'floutv',
     title: 'FLOUtv TVOD Infrastructure',
@@ -157,7 +193,7 @@ export const missions: Mission[] = [
 
 export const timeline: TimelineEntry[] = [
   {
-    title: 'Software Engineer Intern',
+    title: 'Software Engineer Intern / Front-end Engineer',
     organization: 'Quneu.com',
     period: 'Feb 2026 - Current',
     type: 'work',

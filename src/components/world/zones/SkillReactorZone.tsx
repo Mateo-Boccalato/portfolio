@@ -1,58 +1,56 @@
-import { useMemo, useState } from 'react'
-import { motion } from 'framer-motion'
+import { useState } from 'react'
 import { skillClusters } from '../../../content/portfolioContent'
 
-type SkillReactorZoneProps = {
-  isActive: boolean
-}
-
-export function SkillReactorZone({ isActive }: SkillReactorZoneProps) {
+export function SkillReactorZone() {
   const [activeCluster, setActiveCluster] = useState(skillClusters[0].label)
 
-  const selected = useMemo(
-    () => skillClusters.find((cluster) => cluster.label === activeCluster) ?? skillClusters[0],
-    [activeCluster],
-  )
+  const selected = skillClusters.find((cluster) => cluster.label === activeCluster) ?? skillClusters[0]
 
   return (
-    <motion.section className="zone zone--skills" animate={{ opacity: isActive ? 1 : 0.25 }}>
-      <p className="zone-kicker">Skills</p>
-      <h2>Infrastructure layers behind every build</h2>
+    <section className="zone zone--skills">
+      <h2 className="zone-title">Skills</h2>
+      <p className="zone-lead">Pick a board from the quiver to see what I ride with.</p>
 
-      <div className="forge-shell glass-panel">
-        <div className="forge-switcher" role="tablist" aria-label="Skill cluster selector">
-          {skillClusters.map((cluster) => (
-            <button
-              key={cluster.label}
-              type="button"
-              role="tab"
-              className={cluster.label === activeCluster ? 'is-active' : ''}
-              onClick={() => setActiveCluster(cluster.label)}
-              aria-selected={cluster.label === activeCluster}
-            >
-              <span>{cluster.label}</span>
-              <small>District</small>
-            </button>
-          ))}
+      <div className="quiver-layout">
+        <div
+          className="quiver"
+          role="tablist"
+          aria-label="Skill categories"
+          data-prevent-zone-swipe="true"
+        >
+          {skillClusters.map((cluster) => {
+            const isActive = cluster.label === activeCluster
+            return (
+              <button
+                key={cluster.label}
+                type="button"
+                role="tab"
+                id={`board-${cluster.label}`}
+                aria-selected={isActive}
+                aria-controls="quiver-panel"
+                className={`board ${isActive ? 'is-active' : ''}`}
+                onClick={() => setActiveCluster(cluster.label)}
+              >
+                <span>{cluster.label}</span>
+              </button>
+            )
+          })}
         </div>
 
-        <div className="forge-panel">
-          <motion.ul
-            key={selected.label}
-            className="skill-streets"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35 }}
-          >
-            {selected.items.map((item, idx) => (
-              <li key={item} style={{ ['--chip-delay' as string]: `${idx * 60}ms` }}>
-                <span>{item}</span>
-                <i />
-              </li>
+        <div
+          id="quiver-panel"
+          role="tabpanel"
+          aria-labelledby={`board-${selected.label}`}
+          className="quiver-panel"
+        >
+          <h3>{selected.label}</h3>
+          <ul>
+            {selected.items.map((item) => (
+              <li key={item}>{item}</li>
             ))}
-          </motion.ul>
+          </ul>
         </div>
       </div>
-    </motion.section>
+    </section>
   )
 }

@@ -1,57 +1,56 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { timeline } from '../../../content/portfolioContent'
+import { timeline, type TimelineEntry } from '../../../content/portfolioContent'
 
-type TimelineTunnelZoneProps = {
-  isActive: boolean
-}
+type Filter = 'all' | TimelineEntry['type']
 
-export function TimelineTunnelZone({ isActive }: TimelineTunnelZoneProps) {
-  const [activeType, setActiveType] = useState<'all' | 'work' | 'education' | 'course'>('all')
+const filters: { id: Filter; label: string }[] = [
+  { id: 'all', label: 'All' },
+  { id: 'work', label: 'Work' },
+  { id: 'education', label: 'Education' },
+  { id: 'course', label: 'Coursework' },
+]
+
+export function TimelineTunnelZone() {
+  const [activeType, setActiveType] = useState<Filter>('all')
 
   const filtered =
     activeType === 'all' ? timeline : timeline.filter((entry) => entry.type === activeType)
 
   return (
-    <motion.section className="zone zone--timeline" animate={{ opacity: isActive ? 1 : 0.25 }}>
-      <p className="zone-kicker">Experience</p>
-      <h2>Travel stations across work, education, and coursework</h2>
+    <section className="zone zone--timeline">
+      <h2 className="zone-title">Experience</h2>
+      <p className="zone-lead">Work, school, and the courses that shaped how I build.</p>
 
-      <div className="timeline-filters">
-        {(['all', 'work', 'education', 'course'] as const).map((filter) => (
+      <div className="segmented" role="group" aria-label="Filter experience" data-prevent-zone-swipe="true">
+        {filters.map((filter) => (
           <button
-            key={filter}
+            key={filter.id}
             type="button"
-            className={filter === activeType ? 'is-active' : ''}
-            onClick={() => setActiveType(filter)}
+            aria-pressed={filter.id === activeType}
+            className={filter.id === activeType ? 'is-active' : ''}
+            onClick={() => setActiveType(filter.id)}
           >
-            {filter}
+            {filter.label}
           </button>
         ))}
       </div>
 
-      <div className="archive-line" data-prevent-zone-swipe="true">
-        {filtered.map((entry, idx) => (
-          <motion.article
-            key={`${entry.title}-${entry.period}`}
-            className="archive-stop glass-panel"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.04 }}
-          >
-            <span className="archive-stop__node" aria-hidden="true" />
-            <p className={`timeline-type timeline-type--${entry.type}`}>{entry.type}</p>
-            <h3>{entry.title}</h3>
-            <p>{entry.organization}</p>
-            <small>{entry.period}</small>
-            <ul>
-              {entry.highlights.map((highlight) => (
-                <li key={highlight}>{highlight}</li>
-              ))}
-            </ul>
-          </motion.article>
+      <ol className="tide-table">
+        {filtered.map((entry) => (
+          <li key={`${entry.title}-${entry.period}`}>
+            <p className="tide-table__period">{entry.period}</p>
+            <div>
+              <h3>{entry.title}</h3>
+              <p className="tide-table__org">{entry.organization}</p>
+              <ul>
+                {entry.highlights.map((highlight) => (
+                  <li key={highlight}>{highlight}</li>
+                ))}
+              </ul>
+            </div>
+          </li>
         ))}
-      </div>
-    </motion.section>
+      </ol>
+    </section>
   )
 }

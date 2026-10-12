@@ -33,7 +33,7 @@ export function CommandPalette({
     () =>
       zones.map((zone) => ({
         id: zone.id,
-        label: `Open ${zone.label}`,
+        label: zone.label,
         description: zone.subtitle,
       })),
     [zones],
@@ -46,8 +46,8 @@ export function CommandPalette({
         className="command-toggle"
         onClick={() => setIsOpen((value) => !value)}
       >
-        <span>Navigator</span>
-        <kbd>⌘K</kbd>
+        <span>Jump to</span>
+        <kbd aria-hidden="true">⌘K</kbd>
       </button>
 
       <AnimatePresence>
@@ -57,15 +57,21 @@ export function CommandPalette({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            onClick={(event) => {
+              if (event.target === event.currentTarget) setIsOpen(false)
+            }}
           >
             <motion.div
               className="command-palette__panel"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Jump to a section"
               initial={{ y: 18, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -14, opacity: 0 }}
             >
               <header>
-                <p>Zone Switcher</p>
+                <p>Jump to a section</p>
                 <button type="button" onClick={() => setIsOpen(false)}>
                   Close
                 </button>

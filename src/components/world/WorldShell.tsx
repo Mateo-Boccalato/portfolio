@@ -4,8 +4,9 @@ import { zoneOrder } from '../../content/portfolioContent'
 import { shellFade } from '../../animations/motionPresets'
 import { useZoneState } from '../../hooks/useZoneState'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
-import { MiniMap } from '../navigation/MiniMap'
+import { TideChart } from '../navigation/TideChart'
 import { CommandPalette } from '../ui/CommandPalette'
+import { OceanSwell } from './OceanSwell'
 
 const OriginsZone = lazy(() =>
   import('./zones/OriginsZone').then((module) => ({ default: module.OriginsZone })),
@@ -44,35 +45,42 @@ export function WorldShell() {
   }, [goToNext, goToPrevious])
 
   const renderActiveZone = () => {
-    if (activeZone === 'origins') return <OriginsZone isActive />
-    if (activeZone === 'skills') return <SkillReactorZone isActive />
-    if (activeZone === 'missions') return <MissionControlZone isActive />
-    if (activeZone === 'timeline') return <TimelineTunnelZone isActive />
-    return <SignalRoomZone isActive />
+    if (activeZone === 'origins') return <OriginsZone />
+    if (activeZone === 'skills') return <SkillReactorZone />
+    if (activeZone === 'missions') return <MissionControlZone />
+    if (activeZone === 'timeline') return <TimelineTunnelZone />
+    return <SignalRoomZone />
   }
 
   return (
     <div className={`world-shell ${prefersReducedMotion ? 'reduced-motion' : ''}`}>
       <header className="world-header">
-        <div>
-          <p className="world-title">Mateo Boccalato Portfolio</p>
-          <p className="world-subtitle">Explore sections to decode Mateo&apos;s work.</p>
-        </div>
+        <p className="world-title">Mateo Boccalato</p>
         <div className="world-controls">
-          <button type="button" onClick={goToPrevious} aria-label="Previous zone">
-            West
-          </button>
-          <span>
-            {activeIndex + 1}/{zoneOrder.length}
-          </span>
-          <button type="button" onClick={goToNext} aria-label="Next zone">
-            East
-          </button>
+          <CommandPalette zones={zoneOrder} activeZone={activeZone} onSelectZone={setActiveZone} />
+          <div className="world-stepper">
+            <button
+              type="button"
+              onClick={goToPrevious}
+              disabled={activeIndex === 0}
+              aria-label="Previous section"
+            >
+              ‹
+            </button>
+            <span>
+              {activeIndex + 1} of {zoneOrder.length}
+            </span>
+            <button
+              type="button"
+              onClick={goToNext}
+              disabled={activeIndex === zoneOrder.length - 1}
+              aria-label="Next section"
+            >
+              ›
+            </button>
+          </div>
         </div>
       </header>
-
-      <MiniMap zones={zoneOrder} activeZone={activeZone} onSelectZone={setActiveZone} />
-      <CommandPalette zones={zoneOrder} activeZone={activeZone} onSelectZone={setActiveZone} />
 
       <AnimatePresence mode="wait">
         <motion.main
@@ -108,11 +116,16 @@ export function WorldShell() {
             isZoneSwipeBlocked.current = false
           }}
         >
-          <Suspense fallback={<div className="zone zone-loading">Loading zone...</div>}>
+          <Suspense fallback={<div className="zone zone-loading">Loading…</div>}>
             {renderActiveZone()}
           </Suspense>
         </motion.main>
       </AnimatePresence>
+
+      <footer className="ocean">
+        <OceanSwell />
+        <TideChart zones={zoneOrder} activeZone={activeZone} onSelectZone={setActiveZone} />
+      </footer>
     </div>
   )
 }

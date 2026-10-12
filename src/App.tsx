@@ -1,13 +1,7 @@
-import { GlitchCursor } from './components/ui/GlitchCursor'
 import { WorldShell } from './components/world/WorldShell'
 
 function App() {
-  return (
-    <>
-      <WorldShell />
-      <GlitchCursor />
-    </>
-  )
+  return <WorldShell />
 }
 
 export default App

@@ -1,79 +1,74 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { useRef, useState } from 'react'
 import { contactChannels } from '../../../content/portfolioContent'
 
-type SignalRoomZoneProps = {
-  isActive: boolean
+// Email and phone only offer Copy.
+const actionLabels: Record<string, string> = {
+  linkedin: 'Open LinkedIn',
+  github: 'Open GitHub',
+  resume: 'Download PDF',
 }
 
-export function SignalRoomZone({ isActive }: SignalRoomZoneProps) {
-  const [lockedChannelId, setLockedChannelId] = useState(contactChannels[0].id)
-  const [copied, setCopied] = useState('')
+export function SignalRoomZone() {
+  const [copyStatus, setCopyStatus] = useState<{ id: string; ok: boolean } | null>(null)
+  const resetTimer = useRef<number | undefined>(undefined)
 
-  const locked = contactChannels.find((channel) => channel.id === lockedChannelId) ?? contactChannels[0]
-  const isResumeChannel = locked.id === 'resume'
-
-  const copyValue = async (value: string) => {
+  const copyValue = async (id: string, value: string) => {
+    window.clearTimeout(resetTimer.current)
     try {
       await navigator.clipboard.writeText(value)
-      setCopied(value)
-      window.setTimeout(() => setCopied(''), 1200)
+      setCopyStatus({ id, ok: true })
     } catch {
-      setCopied('Clipboard unavailable')
-      window.setTimeout(() => setCopied(''), 1200)
+      setCopyStatus({ id, ok: false })
     }
+    resetTimer.current = window.setTimeout(() => setCopyStatus(null), 1600)
   }
 
   return (
-    <motion.section className="zone zone--signal" animate={{ opacity: isActive ? 1 : 0.25 }}>
-      <p className="zone-kicker">Contact</p>
-      <h2>Launch a direct uplink</h2>
-      <p className="zone-lead">
-        Select a line, lock transmission, then send signal.
+    <section className="zone zone--signal">
+      <h2 className="zone-title">Contact</h2>
+      <p className="zone-lead">Reach me any of these ways. Email gets the quickest reply.</p>
+
+      <ul className="contact-list">
+        {contactChannels.map((channel) => {
+          const isResume = channel.id === 'resume'
+          const status = copyStatus?.id === channel.id ? copyStatus : null
+          return (
+            <li key={channel.id}>
+              <p className="contact-list__label">{channel.label}</p>
+              <p className="contact-list__value">{isResume ? 'Mateo_Boccalato_Resume.pdf' : channel.value}</p>
+              <div className="contact-list__actions">
+                {actionLabels[channel.id] && (
+                  <a
+                    className="button button--primary"
+                    href={channel.href}
+                    target={isResume ? undefined : '_blank'}
+                    rel={isResume ? undefined : 'noreferrer'}
+                    download={isResume ? 'Mateo_Boccalato_Resume.pdf' : undefined}
+                  >
+                    {actionLabels[channel.id]}
+                  </a>
+                )}
+                {!isResume && (
+                  <button
+                    type="button"
+                    className="button"
+                    onClick={() => copyValue(channel.id, channel.value)}
+                  >
+                    {status ? (status.ok ? 'Copied' : 'Copy failed') : 'Copy'}
+                  </button>
+                )}
+              </div>
+            </li>
+          )
+        })}
+      </ul>
+      <p className="visually-hidden" aria-live="polite">
+        {copyStatus
+          ? copyStatus.ok
+            ? 'Copied to clipboard.'
+            : 'Copying failed. Select the text and copy it manually.'
+          : ''}
       </p>
-
-      <div className="dispatch-layout">
-        <div className="dispatch-channels glass-panel">
-          {contactChannels.map((channel) => (
-            <button
-              key={channel.id}
-              type="button"
-              className={channel.id === lockedChannelId ? 'is-active' : ''}
-              onClick={() => setLockedChannelId(channel.id)}
-            >
-              <span>{channel.label}</span>
-              <small>{channel.value}</small>
-            </button>
-          ))}
-        </div>
-
-        <motion.div
-          key={locked.id}
-          className="dispatch-console glass-panel"
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <p>Channel locked: {locked.label}</p>
-          <h3>{locked.value}</h3>
-          <div className="dispatch-actions">
-            <a
-              href={locked.href}
-              target={isResumeChannel ? undefined : '_blank'}
-              rel={isResumeChannel ? undefined : 'noreferrer'}
-              download={isResumeChannel ? 'Mateo_Boccalato_Resume.pdf' : undefined}
-            >
-              {isResumeChannel ? 'Download' : 'Transmit'}
-            </a>
-            {!isResumeChannel && (
-              <button type="button" onClick={() => copyValue(locked.value)}>
-                Copy
-              </button>
-            )}
-          </div>
-          <small className="signal-feedback">{copied ? `Copied: ${copied}` : 'Awaiting relay'}</small>
-        </motion.div>
-      </div>
-    </motion.section>
+    </section>
   )
 }
